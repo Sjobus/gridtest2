@@ -9,41 +9,66 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.scene.transform.Scale;
 
 /**
  *
  * @author sibev
  */
-public class Position {
+public class Position extends Rectangle {
     public int xPos;
     public int yPos;
     public boolean walkable;
-    //Image floor = new Image("https://orig00.deviantart.net/16ec/f/2013/345/7/b/dungeon_floor_by_sharandra-d6xlhqd.png");
-    //ImagePattern floorPattern = new ImagePattern(floor);
+    public boolean isStart = false;
+    public boolean isEnd = false;
     
-    Position(int x, int y, boolean walkable){
+    public int gScore; // distance from this node to the start node
+    public int hScore; // distance from this node to the end node
+    public int fScore; // gScore + hScore
+    
+    public Text nummer;
+    
+    public Position cameFrom;
+    Position(int x, int y, boolean walkable,Text nummer){
         this.xPos = x;
         this.yPos = y;
         this.walkable = walkable;
+        this.nummer = nummer;
+        if(this.xPos == 50 && this.yPos == 25){
+            this.isStart = true;
+        }
+        if(this.yPos == 65 && this.xPos == 130){
+                isEnd = true;
+            }
+        if(this.xPos == 1030 && this.yPos == 605){
+            this.isEnd = true;
+        }
+        
         
     }
     
     public Rectangle getGraphic(){
-        Rectangle rec = new Rectangle(xPos,yPos,32,32);
-        if(walkable)
-            
+        Rectangle rec = new Rectangle(xPos,yPos,20,20);
+        if(walkable && !isEnd && !isStart){
             rec.setFill(Color.WHITE);
-        else
+        }
+        else if(isStart){
+            rec.setFill(Color.CORNFLOWERBLUE);
+        }
+        else if(isEnd){
+            rec.setFill(Color.FIREBRICK);
+        }
+        else{
             rec.setFill(Color.BLACK);
+        }
         rec.setStroke(Color.DARKGRAY);
-        rec.setStrokeWidth(2);
-        
-        Scale scale = new Scale();
-        scale.setPivotX(50);
-        scale.setPivotY(50);
-        rec.getTransforms().add(scale);
-        
+        rec.setStrokeWidth(2);      
+
         return rec;            
+    }
+    
+    public Text getText(){
+        return nummer;
     }
 }
